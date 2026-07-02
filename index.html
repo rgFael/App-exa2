@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8">
+    <title>Untitled</title>
+    
+
+  </head>
+    
+  <body>
+  <!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ruleta de Habilidades</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style>
+        /* Estilos personalizados para animaciones de tensión */
+        .skill-card {
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .skill-card.active-selection {
+            transform: scale(1.05);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        @keyframes pulse-slow {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+        .pulse-pending {
+            animation: pulse-slow 1.5s infinite ease-in-out;
+        }
+    </style>
+</head>
+<body class="bg-white text-slate-800 font-sans min-h-screen flex flex-col justify-between p-4 max-w-md mx-auto select-none">
+
+    <header class="text-center pt-4">
+        <h1 class="text-xl font-bold tracking-wider uppercase text-slate-500 mb-4">Selector de Destino</h1>
+        <div class="flex bg-slate-100 p-1 rounded-xl justify-between border border-slate-200">
+            <button id="btn-mejora" onclick="setModo('mejora')" class="w-1/2 py-2 text-sm font-semibold rounded-lg transition-all bg-white text-emerald-600 shadow-xs">
+                Modo Mejora
+            </button>
+            <button id="btn-peora" onclick="setModo('peora')" class="w-1/2 py-2 text-sm font-semibold rounded-lg transition-all text-slate-500 hover:text-rose-600">
+                Modo Peora
+            </button>
+        </div>
+    </header>
+
+    <main class="grid grid-cols-2 gap-3 my-6">
+        <div id="card-velocidad" class="skill-card bg-slate-50 border border-slate-200 rounded-xl p-4 flex flex-col justify-between h-28 relative">
+            <span class="text-xs font-semibold text-slate-400 tracking-wider uppercase">Habilidad</span>
+            <span class="text-lg font-bold text-slate-700">Velocidad</span>
+            <button onclick="toggleLock('velocidad')" class="absolute top-3 right-3 text-slate-400 hover:text-slate-600 transition-colors">
+                <svg id="lock-velocidad" class="w-5 h-5 stroke-current fill-none stroke-2" viewBox="0 0 24 24">
+                    <rect x="5" y="11" width="14" height="11" rx="2" />
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                </svg>
+            </button>
+        </div>
+
+        <div id="card-agilidad" class="skill-card bg-slate-50 border border-slate-200 rounded-xl p-4 flex flex-col justify-between h-28 relative">
+            <span class="text-xs font-semibold text-slate-400 tracking-wider uppercase">Habilidad</span>
+            <span class="text-lg font-bold text-slate-700">Agilidad</span>
+            <button onclick="toggleLock('agilidad')" class="absolute top-3 right-3 text-slate-400 hover:text-slate-600 transition-colors">
+                <svg id="lock-agilidad" class="w-5 h-5 stroke-current fill-none stroke-2" viewBox="0 0 24 24">
+                    <rect x="5" y="11" width="14" height="11" rx="2" />
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                </svg>
+            </button>
+        </div>
+
+        <div id="card-fuerza" class="skill-card bg-slate-50 border border-slate-200 rounded-xl p-4 flex flex-col justify-between h-28 relative">
+            <span class="text-xs font-semibold text-slate-400 tracking-wider uppercase">Habilidad</span>
+            <span class="text-lg font-bold text-slate-700">Fuerza</span>
+            <button onclick="toggleLock('fuerza')" class="absolute top-3 right-3 text-slate-400 hover:text-slate-600 transition-colors">
+                <svg id="lock-fuerza" class="w-5 h-5 stroke-current fill-none stroke-2" viewBox="0 0 24 24">
+                    <rect x="5" y="11" width="14" height="11" rx="2" />
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                </svg>
+            </button>
+        </div>
+
+        <div id="card-inteligencia" class="skill-card bg-slate-50 border border-slate-200 rounded-xl p-4 flex flex-col justify-between h-28 relative">
+            <span class="text-xs font-semibold text-slate-400 tracking-wider uppercase">Habilidad</span>
+            <span class="text-lg font-bold text-slate-700">Inteligencia</span>
+            <button onclick="toggleLock('inteligencia')" class="absolute top-3 right-3 text-slate-400 hover:text-slate-600 transition-colors">
+                <svg id="lock-inteligencia" class="w-5 h-5 stroke-current fill-none stroke-2" viewBox="0 0 24 24">
+                    <rect x="5" y="11" width="14" height="11" rx="2" />
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                </svg>
+            </button>
+        </div>
+
+        <div id="card-punteria" class="skill-card bg-slate-50 border border-slate-200 rounded-xl p-4 flex flex-col justify-between h-28 relative">
+            <span class="text-xs font-semibold text-slate-400 tracking-wider uppercase">Habilidad</span>
+            <span class="text-lg font-bold text-slate-700">Puntería</span>
+            <button onclick="toggleLock('punteria')" class="absolute top-3 right-3 text-slate-400 hover:text-slate-600 transition-colors">
+                <svg id="lock-punteria" class="w-5 h-5 stroke-current fill-none stroke-2" viewBox="0 0 24 24">
+                    <rect x="5" y="11" width="14" height="11" rx="2" />
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                </svg>
+            </button>
+        </div>
+
+        <div id="card-compostura" class="skill-card bg-slate-50 border border-slate-200 rounded-xl p-4 flex flex-col justify-between h-28 relative">
+            <span class="text-xs font-semibold text-slate-400 tracking-wider uppercase">Habilidad</span>
+            <span class="text-lg font-bold text-slate-700">Compostura</span>
+            <button onclick="toggleLock('compostura')" class="absolute top-3 right-3 text-slate-400 hover:text-slate-600 transition-colors">
+                <svg id="lock-compostura" class="w-5 h-5 stroke-current fill-none stroke-2" viewBox="0 0 24 24">
+                    <rect x="5" y="11" width="14" height="11" rx="2" />
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                </svg>
+            </button>
+        </div>
+    </main>
+
+    <div id="result-display" class="min-h-24 flex flex-col items-center justify-center border border-dashed border-slate-200 rounded-xl p-4 text-center mb-6 bg-slate-50/50">
+        <p id="result-status" class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-1">Esperando tirada</p>
+        <div id="result-text" class="text-base font-medium text-slate-500">Define las tiradas y presiona jugar</div>
+    </div>
+
+    <footer class="flex gap-3 pb-4">
+        <div class="w-1/3 flex flex-col gap-1">
+            <label class="text-[10px] font-bold uppercase tracking-wider text-slate-400 pl-1">Tiradas</label>
+            <input type="number" id="input-tiradas" value="1" min="1" max="10" class="w-full h-12 text-center font-bold text-lg border border-slate-200 rounded-xl bg-slate-50 focus:outline-none focus:border-slate-400">
+        </div>
+        <div class="w-2/3 flex flex-row gap-2 justify-end items-end">
+            <button id="btn-skip" onclick="skipAnimacion()" class="hidden w-1/3 h-12 bg-slate-200 text-slate-700 font-bold text-xs tracking-widest uppercase rounded-xl active:scale-98 transition-all cursor-pointer">
+                SKIP
+            </button>
+            <button id="btn-jugar" onclick="iniciarSorteo()" class="w-full h-12 bg-slate-900 text-white font-bold text-sm tracking-widest uppercase rounded-xl active:scale-98 transition-all shadow-md cursor-pointer">
+                JUGAR
+            </button>
+        </div>
+    </footer>
+
+    <script>
+        // Configuración Inicial
+        let modoActual = 'mejora';
+        let saltarAnimacion = false;
+        const habilidades = ['velocidad', 'agilidad', 'fuerza', 'inteligencia', 'punteria', 'compostura'];
+        const nombresHabilidades = {
+            velocidad: 'Velocidad', agilidad: 'Agilidad', fuerza: 'Fuerza',
+            inteligencia: 'Inteligencia', punteria: 'Puntería', compostura: 'Compostura'
+        };
+        let bloqueadas = {
+            velocidad: false, agilidad: false, fuerza: false,
+            inteligencia: false, punteria: false, compostura: false
+        };
+
+        // Cambiar Modo (Mejora / Peora)
+        function setModo(modo) {
+            modoActual = modo;
+            const btnMejora = document.getElementById('btn-mejora');
+            const btnPeora = document.getElementById('btn-peora');
+            
+            if (modo === 'mejora') {
+                btnMejora.className = "w-1/2 py-2 text-sm font-semibold rounded-lg transition-all bg-white text-emerald-600 shadow-xs cursor-pointer";
+                btnPeora.className = "w-1/2 py-2 text-sm font-semibold rounded-lg transition-all text-slate-500 hover:text-rose-600 cursor-pointer";
+            } else {
+                btnPeora.className = "w-1/2 py-2 text-sm font-semibold rounded-lg transition-all bg-white text-rose-600 shadow-xs cursor-pointer";
+                btnMejora.className = "w-1/2 py-2 text-sm font-semibold rounded-lg transition-all text-slate-500 hover:text-emerald-600 cursor-pointer";
+            }
+        }
+
+        // Alternar Bloqueo de Habilidad con Dibujo SVG Interactivo
+        function toggleLock(id) {
+            bloqueadas[id] = !bloqueadas[id];
+            const card = document.getElementById(`card-${id}`);
+            const svg = document.getElementById(`lock-${id}`);
+            
+            if (bloqueadas[id]) {
+                card.classList.add('opacity-40', 'bg-slate-100');
+                svg.innerHTML = '<rect x="5" y="11" width="14" height="11" rx="2" /><path d="M7 11V7a5 5 0 0 1 10 0v4" />';
+                svg.classList.remove('text-slate-400');
+                svg.classList.add('text-slate-800');
+            } else {
+                card.classList.remove('opacity-40', 'bg-slate-100');
+                svg.innerHTML = '<rect x="5" y="11" width="14" height="11" rx="2" /><path d="M7 7a5 5 0 0 1 10 0v4" />';
+                svg.classList.remove('text-slate-800');
+                svg.classList.add('text-slate-400');
+            }
+        }
+
+        function skipAnimacion() {
+            saltarAnimacion = true;
+        }
+
+        // Lógica de Sorteo y Mecánica de Tensión
+        async function iniciarSorteo() {
+            const disponibles = habilidades.filter(h => !bloqueadas[h]);
+            const numTiradas = parseInt(document.getElementById('input-tiradas').value) || 1;
+            const btnJugar = document.getElementById('btn-jugar');
+            const btnSkip = document.getElementById('btn-skip');
+            
+            if (disponibles.length === 0) {
+                alert("¡No puedes bloquear todas las habilidades!");
+                return;
+            }
+
+            saltarAnimacion = false;
+            btnJugar.disabled = true;
+            btnJugar.classList.add('opacity-50');
+            btnJugar.classList.replace('w-full', 'w-2/3');
+            btnSkip.classList.remove('hidden');
+            
+            let seleccionadasFinales = [];
+            
+            for (let t = 0; t < numTiradas; t++) {
+                if (saltarAnimacion) {
+                    // Si se saltó la animación, calcular el resto de tiradas instantáneamente
+                    const ganadora = disponibles[Math.floor(Math.random() * disponibles.length)];
+                    seleccionadasFinales.push(ganadora);
+                } else {
+                    actualizarPantallaTension(t + 1, numTiradas);
+                    const ganadora = await ejecutarAnimacionTension(disponibles);
+                    seleccionadasFinales.push(ganadora);
+                }
+            }
+
+            mostrarResultadoFinal(seleccionadasFinales);
+            btnJugar.disabled = false;
+            btnJugar.classList.remove('opacity-50');
+            btnJugar.classList.replace('w-2/3', 'w-full');
+            btnSkip.classList.add('hidden');
+        }
+
+        function actualizarPantallaTension(actual, total) {
+            const status = document.getElementById('result-status');
+            const texto = document.getElementById('result-text');
+            status.className = "text-xs font-bold uppercase tracking-widest text-amber-500 pulse-pending";
+            status.innerText = `Tirada ${actual} de ${total}`;
+            texto.innerText = "Calculando trayectorias...";
+            texto.className = "text-xl font-light italic text-slate-400";
+        }
+
+        function ejecutarAnimacionTension(disponibles) {
+            return new Promise((resolve) => {
+                let cambios = 16 + Math.floor(Math.random() * 8); 
+                let indiceActual = 0;
+                let velocidadActual = 40; 
+                let tarjetaAnterior = null;
+
+                function alternarLuz() {
+                    if (tarjetaAnterior) {
+                        tarjetaAnterior.classList.remove('active-selection', 'border-amber-400', 'bg-amber-50/30');
+                    }
+
+                    if (saltarAnimacion) {
+                        resolve(disponibles[Math.floor(Math.random() * disponibles.length)]);
+                        return;
+                    }
+
+                    const idHabilidad = disponibles[indiceActual % disponibles.length];
+                    const tarjeta = document.getElementById(`card-${idHabilidad}`);
+                    
+                    tarjeta.classList.add('active-selection', 'border-amber-400', 'bg-amber-50/30');
+                    tarjetaAnterior = tarjeta;
+
+                    cambios--;
+                    indiceActual++;
+
+                    if (cambios > 0) {
+                        if (cambios < 8) velocidadActual += 45; 
+                        else if (cambios < 4) velocidadActual += 90;
+                        
+                        setTimeout(alternarLuz, velocidadActual);
+                    } else {
+                        setTimeout(() => {
+                            tarjeta.classList.remove('active-selection', 'border-amber-400', 'bg-amber-50/30');
+                            resolve(idHabilidad);
+                        }, 400);
+                    }
+                }
+                alternarLuz();
+            });
+        }
+
+        function mostrarResultadoFinal(seleccionadas) {
+            const status = document.getElementById('result-status');
+            const texto = document.getElementById('result-text');
+            
+            const conteo = {};
+            seleccionadas.forEach(h => conteo[h] = (conteo[h] || 0) + 1);
+
+            let mensajes = [];
+            for (const h in conteo) {
+                const puntos = conteo[h];
+                if (modoActual === 'mejora') {
+                    mensajes.push(`<span class="font-bold text-emerald-600">▲ +${puntos}</span> en ${nombresHabilidades[h]}`);
+                } else {
+                    mensajes.push(`<span class="font-bold text-rose-600">▼ -${puntos}</span> en ${nombresHabilidades[h]}`);
+                }
+            }
+
+            status.innerText = "";
+            status.className = "hidden";
+            texto.innerHTML = `<div class="space-y-1 text-slate-700">${mensajes.join('<br>')}</div>`;
+        }
+    </script>
+</body>
+</html>
+    
+  </body>
+  
+</html>
